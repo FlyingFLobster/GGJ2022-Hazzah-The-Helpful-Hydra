@@ -28,6 +28,6 @@ public class NPCController : MonoBehaviour
         talker.SetTalking();
         talker.ClearText();
         talker.SetText("Oh? You're approaching me?");
-        talker.ShowFloatingDialogue();
+        //talker.ShowFloatingDialogue();
     }
 }

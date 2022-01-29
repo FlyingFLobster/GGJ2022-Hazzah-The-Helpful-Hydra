@@ -55,6 +55,8 @@ public class Talker : MonoBehaviour
         Vector3 floatingTextPosition = transform.position;
         floatingTextPosition.y = GetComponent<Collider>().bounds.size.y;
         floatingText.transform.position = floatingTextPosition;
+
+        ShowFloatingDialogue();
     }
 
     public void ShowFloatingDialogue()
@@ -73,6 +75,28 @@ public class Talker : MonoBehaviour
         }
     }
 
+    // Shows text in the text box over time.
+    private IEnumerator TextOverTime(string inText)
+    {
+        Debug.Log(inText);
+        string originalString = inText;
+        int charCounter = 0;
+        while (charCounter < originalString.Length)
+        {
+
+            while (originalString[charCounter] == ' ') // Skip over spaces.
+            {
+                charCounter = charCounter + 1;
+            }
+
+            charCounter = charCounter + 1;
+
+            text = originalString.Substring(0, charCounter);
+
+            yield return new WaitForSeconds(0.07f);
+        }
+    }
+
     // Cycle's through the NPC's idle chatter and displays it in their floating text box.
     private void CycleChatter()
     {
@@ -86,8 +110,6 @@ public class Talker : MonoBehaviour
             }
 
             text = chatter[currentChatter];
-
-            ShowFloatingDialogue();
         }
 
         Invoke("CycleChatter", 4.0f); // Invokes itself in 4 seconds time, runs for basically the NPC's entire life.
@@ -100,7 +122,8 @@ public class Talker : MonoBehaviour
 
     public void SetText(string inText)
     {
-        text = inText;
+        text = "";
+        StartCoroutine(TextOverTime(inText));
     }
 
     public void SetIdle()

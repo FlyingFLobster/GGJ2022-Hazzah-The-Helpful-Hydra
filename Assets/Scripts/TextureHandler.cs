@@ -39,7 +39,7 @@ public class TextureHandler : MonoBehaviour
 
         newScale.x = newScale.z * aspectRatio;
 
-        Debug.Log("Aspect Ratio: " + aspectRatio + "\nz: " + newScale.z + "\n new x: " + newScale.x);
+        //Debug.Log("Aspect Ratio: " + aspectRatio + "\nz: " + newScale.z + "\n new x: " + newScale.x);
 
         transform.localScale = newScale;
     }
