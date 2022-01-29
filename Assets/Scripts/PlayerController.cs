@@ -14,6 +14,17 @@ public class PlayerController : MonoBehaviour
     private Transform tr;
     private Talker talker;
 
+    // Boolean dictionary, Keys are names for dialogue switches, values are booleans, just gonna store on 
+    // the player for now for ease of access since they will always be in the scene and part of the conversation.
+    Dictionary<string, bool> dialogueSwitches = new Dictionary<string, bool>
+    { 
+        {"SSYLVISSTALKED", false},
+        {"RHASTTALKED", false},
+        {"RHASTTIP", false}
+    };
+
+    private ConversationController conv;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +32,7 @@ public class PlayerController : MonoBehaviour
         tr = GetComponent<Transform>();
 
         talker = GetComponent<Talker>();
+        conv = null;
     }
 
     // Update is called once per frame
@@ -66,7 +78,9 @@ public class PlayerController : MonoBehaviour
          * Talking with NPCs should start with a button press that broadcasts to a nearby npc, initiating a dialogue sequence with them.
          */
         // Talk with Haz
-        if (Input.GetButtonDown("Talk With Haz") || Input.GetButtonDown("Talk With Zah"))
+        bool hazTalk = Input.GetButtonDown("Talk With Haz");
+        bool zahTalk = Input.GetButtonDown("Talk With Zah");
+        if (hazTalk || zahTalk)
         {
             if (talker.GetState() == Talker.State.Idle) // If not in conversation, initialize one.
             {
@@ -82,23 +96,52 @@ public class PlayerController : MonoBehaviour
                     GameObject interactionTarget = hits[0].gameObject;
 
                     // Setup conversation Controller.
-                    ConversationController conv = Instantiate(ConversationControllerPrefab, transform.position, Quaternion.identity).GetComponent<ConversationController>();
+                    conv = Instantiate(ConversationControllerPrefab, transform.position, Quaternion.identity).GetComponent<ConversationController>();
 
                     conv.SetPlayer(gameObject);
                     conv.SetNPC(interactionTarget);
 
                     //interactionTarget.GetComponent<NPCController>().StartTalk();
                     //talker.SetIdleConversation();
+
+                    // Call initial dialogue to start the conversation with Haz or Zah.
+                    if (hazTalk)
+                    {
+                        conv.AdvanceConversation("Talk With Haz");
+                    }
+                    else
+                    {
+                        conv.AdvanceConversation("Talk With Zah");
+                    }
                 }
             }
             else // In a conversation
             {
-
+                if (conv != null)
+                {
+                    if (hazTalk)
+                    {
+                        conv.AdvanceConversation("Talk With Haz");
+                    }
+                    else
+                    {
+                        conv.AdvanceConversation("Talk With Zah");
+                    }
+                }
             }
         }
     }
 
-    private void FixedUpdate()
+    // Called by the conversation controller as cleanup after the conversation has finished.
+    public void EndConversation()
     {
+        talker.SetIdle();
+        conv = null;
+    }
+
+    // Takes in a key for the dictionary of dialogue switches and sets it to true.
+    public void ActivateSwitch(string key)
+    {
+        dialogueSwitches[key] = true;
     }
 }
