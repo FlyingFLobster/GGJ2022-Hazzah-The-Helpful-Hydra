@@ -28,7 +28,7 @@ namespace Dialogue
     // TODO: directory to config file
     public static class Constants
     {
-        public const string DIALOGUE_DIR = @"C:\dev\unity_projects\hydra\HydraDialogue\HydraDialogue\dialogue_json";
+        public const string DIALOGUE_DIR = @"C:\dev\unity_projects\GGJ2022-Hazzah-The-Helpful-Hydra\Assets\DialogueData";
     }
 
 
@@ -41,6 +41,7 @@ namespace Dialogue
             // Return the list of zone codes
             return new List<string> { "npc_rhast", "player_haz", "player_zah" };
         }
+
         public static Dictionary<string, Dictionary<string, string>> GetZoneLines(string zoneCode)
         {
             Dictionary<string, Dictionary<string, string>> lines = new Dictionary<string, Dictionary<string, string>>();
@@ -63,17 +64,7 @@ namespace Dialogue
 
             return lines;
         }
-    }
 
-    public class LineJson
-    {
-        public string code;
-        public string text;
-    }
-
-
-    class HydraDialogue
-    {
         static void Main(string[] args)
         {
             // When Hazzah enters a new zone, load all dialogue from actors who can be in that zone
@@ -83,6 +74,17 @@ namespace Dialogue
 
             int a = 2;
         }
-
     }
+
+    public class LineJson
+    {
+        public string code;
+        public string text;
+        public List<string> switches_read;
+        public List<string> targets1;
+        public List<string> targets2;
+        public List<string> switches_set_true;
+        public List<string> switches_set_false;
+    }
+
 }
