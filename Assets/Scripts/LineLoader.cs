@@ -1,7 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/*
+ * Might wanna put these in if things seem wonky:
+ * 
+ *  using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+ */
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -24,61 +30,70 @@ namespace Dialogue
     // TODO: directory to config file
     public static class Constants
     {
-        public const string DIALOGUE_DIR = @"C:\dev\unity_projects\hydra\HydraDialogue\HydraDialogue\dialogue_json";
+        public const string DIALOGUE_DIR = @"C:\dev\unity_projects\GGJ2022-Hazzah-The-Helpful-Hydra\Assets\DialogueData";
     }
 
 
     public class LineLoader
     {
+        // Return the list of actor codes of actors in the specified zone
         public static List<string> GetZoneActors(string zoneCode)
         {
             // TODO: Ask Unity for all actors currently in the specified zone
 
-            // Return the list of zone codes
-            return new List<string> { "npc_rhast", "player_haz", "player_zah" };
+
+            return new List<string> { "npc_ssylviss", "player_haz", "player_zah" };
         }
-        public static Dictionary<string, Dictionary<string, string>> GetZoneLines(string zoneCode)
+
+        // Return the line dialogue data for all actors in the specified zone (keyed by actor_code, line_code)
+        public static Dictionary<string, Dictionary<string, LineData>> GetZoneLines(string zoneCode)
         {
-            Dictionary<string, Dictionary<string, string>> lines = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, Dictionary<string, LineData>> lines = new Dictionary<string, Dictionary<string, LineData>>();
 
             foreach (string actor_code in GetZoneActors(zoneCode))
             {
-                lines.Add(actor_code, new Dictionary<string, string>());
+                lines.Add(actor_code, new Dictionary<string, LineData>());
 
                 string path = Path.ChangeExtension(Path.Combine(new string[] { Constants.DIALOGUE_DIR, actor_code }), ".txt");
                 using (StreamReader r = new StreamReader(path))
                 {
                     string json = r.ReadToEnd();
-                    List<LineJson> actor_lines = JsonConvert.DeserializeObject<List<LineJson>>(json);
-                    foreach (LineJson line in actor_lines)
+                    List<LineData> actor_lines = JsonConvert.DeserializeObject<List<LineData>>(json);
+                    foreach (LineData line in actor_lines)
                     {
-                        lines[actor_code].Add(line.code, line.text);
+                        CheckLine(line);
+                        lines[actor_code].Add(line.code, line);
                     }
                 }
             }
 
             return lines;
         }
+
+        // Check that the switches_read, targets1, targets2 Lists are all same length,
+        // and final switch is empty string, and final switch's target1 is non-empty string
+        private static void CheckLine(LineData line)
+        {
+            int n_switches = line.switches_read.Count;
+            if (n_switches != line.targets1.Count ||
+                n_switches != line.targets2.Count ||
+                line.switches_read[n_switches - 1] != "" ||
+                line.targets1[n_switches - 1] == "")
+            {
+                throw new IOException(String.Format("JSON dialogue error for line with code: {} and text: {}", line.code, line.text));
+            }
+        }
     }
 
-    public class LineJson
+    public class LineData
     {
         public string code;
         public string text;
+        public List<string> switches_read;
+        public List<string> targets1;
+        public List<string> targets2;
+        public List<string> switches_set_true;
+        public List<string> switches_set_false;
     }
 
-
-    class HydraDialogue
-    {
-        static void Main(string[] args)
-        {
-            // When Hazzah enters a new zone, load all dialogue from actors who can be in that zone
-            string zone_code = "zone1";
-            Dictionary<string, Dictionary<string, string>> lines = LineLoader.GetZoneLines(zone_code);
-
-
-            int a = 2;
-        }
-
-    }
 }
