@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
 
     private ConversationController conv;
 
+    // The two interact prompts.
+    private GameObject promptHaz;
+    private GameObject promptZah;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +37,12 @@ public class PlayerController : MonoBehaviour
 
         talker = GetComponent<Talker>();
         conv = null;
+
+        // Get References to interact prompts.
+        promptHaz = gameObject.transform.Find("Haz Prompt").gameObject;
+        promptZah = gameObject.transform.Find("Zah Prompt").gameObject;
+        // Disable the interact prompts (should only be visible when in a situation where they can be pressed).
+        HidePrompts();
     }
 
     // Update is called once per frame
@@ -73,6 +83,21 @@ public class PlayerController : MonoBehaviour
 
         tr.position = tr.position + new Vector3(horizontalInput * Time.deltaTime, 0.0f, verticalInput * Time.deltaTime);
 
+
+        // Cast a collider to check for a nearby NPC to interact with.
+        List<Collider> hits = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, 3));
+        hits.RemoveAll(hit => !hit.tag.Equals("NPC")); // Filter all non-NPC tagged objects out.
+
+        // If there is an NPC nearby then display the two talk prompts.
+        if (talker.GetState() == Talker.State.Idle && hits.Count >0)
+        {
+            ShowPrompts();
+        }
+        else
+        {
+            HidePrompts();
+        }
+
         // Interaction.
         /*
          * Talking with NPCs should start with a button press that broadcasts to a nearby npc, initiating a dialogue sequence with them.
@@ -84,11 +109,6 @@ public class PlayerController : MonoBehaviour
         {
             if (talker.GetState() == Talker.State.Idle) // If not in conversation, initialize one.
             {
-                // Cast a collider to check for a nearby NPC to interact with.
-                List<Collider> hits = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, 3));
-                hits.RemoveAll(hit => !hit.tag.Equals("NPC")); // Filter all non-NPC tagged objects out.
-
-
                 // Just take the first one to interact with, since none of them should be super closeby eachother,
                 // and all non-NPC tagged objects have been filtered out.
                 if (hits.Count > 0)
@@ -148,5 +168,18 @@ public class PlayerController : MonoBehaviour
     public bool CheckSwitch(string key)
     {
         return dialogueSwitches[key];
+    }
+
+    // These two hide and display the Haz/Zah prompts above the player's head, indicating that they can do something.
+    public void ShowPrompts()
+    {
+        promptHaz.SetActive(true);
+        promptZah.SetActive(true);
+    }
+
+    public void HidePrompts()
+    {
+        promptHaz.SetActive(false);
+        promptZah.SetActive(false);
     }
 }
