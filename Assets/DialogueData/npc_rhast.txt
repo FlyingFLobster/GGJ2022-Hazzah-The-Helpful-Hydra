@@ -1,0 +1,9 @@
+[
+	{ "code": "a", 
+	  "text": "a",
+	  "switches_read": [""],
+	  "targets1": ["player_zah/intro6"],
+	  "targets2": [""],
+	  "switches_set_true": [],
+	  "switches_set_false": []},
+] 
