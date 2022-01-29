@@ -21,10 +21,14 @@ public class Talker : MonoBehaviour
     public enum State
     {
         Idle,
+        IdleConversation,
         Talking
     };
 
     private State currentState;
+
+    // Audio Source for speech.
+    private AudioSource speech;
 
 
     // Start is called before the first frame update
@@ -39,6 +43,8 @@ public class Talker : MonoBehaviour
         currentState = State.Idle;
         currentChatter = 0;
         text = chatter[currentChatter];
+
+        speech = GetComponentInChildren<AudioSource>();
 
         Invoke("CycleChatter", 4.0f);
     }
@@ -78,7 +84,7 @@ public class Talker : MonoBehaviour
     // Shows text in the text box over time.
     private IEnumerator TextOverTime(string inText)
     {
-        Debug.Log(inText);
+        speech.Play();
         string originalString = inText;
         int charCounter = 0;
         while (charCounter < originalString.Length)
@@ -95,6 +101,8 @@ public class Talker : MonoBehaviour
 
             yield return new WaitForSeconds(0.07f);
         }
+        speech.Stop();
+        SetIdleConversation();
     }
 
     // Cycle's through the NPC's idle chatter and displays it in their floating text box.
@@ -120,15 +128,25 @@ public class Talker : MonoBehaviour
         text = "";
     }
 
-    public void SetText(string inText)
+    // Starts a talk over time routine for the character.
+    public void TalkText(string inText)
     {
-        text = "";
-        StartCoroutine(TextOverTime(inText));
+        if (currentState != State.Talking)
+        {
+            SetTalking();
+            text = "";
+            StartCoroutine(TextOverTime(inText));
+        }
     }
 
     public void SetIdle()
     {
         currentState = State.Idle;
+    }
+
+    public void SetIdleConversation()
+    {
+        currentState = State.IdleConversation;
     }
 
     public void SetTalking()

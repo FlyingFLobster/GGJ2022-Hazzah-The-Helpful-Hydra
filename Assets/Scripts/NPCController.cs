@@ -25,9 +25,7 @@ public class NPCController : MonoBehaviour
     // Called by the player object to initiate a conversation.
     public void StartTalk()
     {
-        talker.SetTalking();
-        talker.ClearText();
-        talker.SetText("Oh? You're approaching me?");
+        talker.TalkText("Oh? You're approaching me?");
         //talker.ShowFloatingDialogue();
     }
 }
