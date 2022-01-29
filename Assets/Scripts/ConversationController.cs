@@ -11,8 +11,11 @@ public class ConversationController : MonoBehaviour
 {
     private GameObject player;
     private GameObject npc;
+
+    private GameObject camera; // For tracking the camera to the currently speaker character.
     private Dictionary<string, Dictionary<string, LineData>> lines;
     private LineData currentLine;
+
 
     // Start is called before the first frame update
     void Start()
