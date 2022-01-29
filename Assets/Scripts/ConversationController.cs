@@ -37,7 +37,7 @@ public class ConversationController : MonoBehaviour
     // Codes are: "Talk With Haz"
     //            "Talk With Zah"
     // If the current piece of dialogue isn't a choice, both buttons will just advance dialogue normally.
-    public void AdvanceConversation(string buttonName)
+    public void AdvanceConversation(string playerChoice)
     {
         string switch_code;
         LineData next_line;
@@ -53,13 +53,13 @@ public class ConversationController : MonoBehaviour
             {
                 if (GlobalSwitches[switch_code])
                 {
-                    next_line = ChooseWhichHead(buttonName, i);
+                    next_line = ChooseWhichHead(playerChoice, i);
                     break;
                 }
             }
 
             // If the fake switch ("") is reached, just get the target
-            next_line = ChooseWhichHead(buttonName, i);
+            next_line = ChooseWhichHead(playerChoice, i);
         }
 
 
@@ -73,14 +73,13 @@ public class ConversationController : MonoBehaviour
             GlobalSwitches[switch_code] = false;
         }
 
-
         // Update the current line
         currentLine = next_line;
 
         // Where to send the text of the new line?
     }
 
-    private LineData ChooseWhichHead(string buttonName, int switchIdx)
+    private LineData ChooseWhichHead(string playerChoice, int switchIdx)
     {
         string next_line_code;
         LineData next_line;
@@ -94,7 +93,7 @@ public class ConversationController : MonoBehaviour
         // If there are two, consider the player's input choice
         else
         {
-            next_line_code = (buttonName == "Talk With Haz") ? currentLine.targets1[switchIdx] : currentLine.targets2[switchIdx];
+            next_line_code = (playerChoice == "Talk With Haz") ? currentLine.targets1[switchIdx] : currentLine.targets2[switchIdx];
             next_line = lines[next_line_code];
         }
 
