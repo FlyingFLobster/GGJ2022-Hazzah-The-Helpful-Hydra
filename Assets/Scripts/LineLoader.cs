@@ -1,10 +1,6 @@
-/*
- * Might wanna put these in if things seem wonky:
- * 
- *  using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
- */
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 using System.IO;
 using Newtonsoft.Json;

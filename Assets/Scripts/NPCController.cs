@@ -22,10 +22,18 @@ public class NPCController : MonoBehaviour
         
     }
 
+    /*
     // Called by the player object to initiate a conversation.
     public void StartTalk()
     {
-        talker.TalkText("Oh? You're approaching me?");
+        //talker.TalkText("Oh? You're approaching me?");
         //talker.ShowFloatingDialogue();
+    }
+    */
+
+    // Called by the conversation controller as cleanup after the conversation has finished.
+    public void EndConversation()
+    {
+        talker.SetIdle();
     }
 }

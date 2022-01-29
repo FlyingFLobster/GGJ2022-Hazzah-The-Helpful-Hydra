@@ -23,6 +23,24 @@ public class ConversationController : MonoBehaviour
         
     }
 
+    // This is called when the player presses the Haz or Zah buttons, which button is sent as a button Name.
+    // Codes are: "Talk With Haz"
+    //            "Talk With Zah"
+    // If the current piece of dialogue isn't a choice, both buttons will just advance dialogue normally.
+    public void AdvanceConversation(string buttonName)
+    {
+
+    }
+
+    // This is called when the conversation has finished, should clean everything up to how it was before the,
+    // conversation happened and destruct the Conversation Controller.
+    private void EndConversation()
+    {
+        // Call EndConversation methods on Player and NPC.
+        player.GetComponent<PlayerController>().EndConversation();
+        npc.GetComponent<NPCController>().EndConversation();
+    }
+
     // These should be called as soon as the conversation controller is instantiated, to prevent unruly behaviour.
     public void SetPlayer(GameObject inPlayer)
     {
