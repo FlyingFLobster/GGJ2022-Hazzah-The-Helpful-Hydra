@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject ConversationControllerPrefab;
     public int playerSpeed = 0;
 
     private Rigidbody rb;
@@ -67,18 +68,32 @@ public class PlayerController : MonoBehaviour
         // Talk with Haz
         if (Input.GetButtonDown("Talk With Haz") || Input.GetButtonDown("Talk With Zah"))
         {
-            // Cast a collider to check for a nearby NPC to interact with.
-            List<Collider> hits = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, 3));
-            hits.RemoveAll(hit => !hit.tag.Equals("NPC")); // Filter all non-NPC tagged objects out.
-
-
-            // Just take the first one to interact with, since none of them should be super closeby eachother,
-            // and all non-NPC tagged objects have been filtered out.
-            if (hits.Count > 0)
+            if (talker.GetState() == Talker.State.Idle) // If not in conversation, initialize one.
             {
-                GameObject interactionTarget = hits[0].gameObject;
-                interactionTarget.GetComponent<NPCController>().StartTalk();
-                talker.SetIdleConversation();
+                // Cast a collider to check for a nearby NPC to interact with.
+                List<Collider> hits = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, 3));
+                hits.RemoveAll(hit => !hit.tag.Equals("NPC")); // Filter all non-NPC tagged objects out.
+
+
+                // Just take the first one to interact with, since none of them should be super closeby eachother,
+                // and all non-NPC tagged objects have been filtered out.
+                if (hits.Count > 0)
+                {
+                    GameObject interactionTarget = hits[0].gameObject;
+
+                    // Setup conversation Controller.
+                    ConversationController conv = Instantiate(ConversationControllerPrefab, transform.position, Quaternion.identity).GetComponent<ConversationController>();
+
+                    conv.SetPlayer(gameObject);
+                    conv.SetNPC(interactionTarget);
+
+                    //interactionTarget.GetComponent<NPCController>().StartTalk();
+                    //talker.SetIdleConversation();
+                }
+            }
+            else // In a conversation
+            {
+
             }
         }
     }
