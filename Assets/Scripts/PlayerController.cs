@@ -11,12 +11,15 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
     private Transform tr;
+    private Talker talker;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         tr = GetComponent<Transform>();
+
+        talker = GetComponent<Talker>();
     }
 
     // Update is called once per frame
@@ -54,9 +57,25 @@ public class PlayerController : MonoBehaviour
         tr.position = tr.position + new Vector3(horizontalInput * Time.deltaTime, 0.0f, verticalInput * Time.deltaTime);
 
         // Interaction.
-        if (Input.GetButtonDown(""))
+        /*
+         * Talking with NPCs should start with a button press that broadcasts to a nearby npc, initiating a dialogue sequence with them.
+         */
+        // Talk with Haz
+        if (Input.GetButtonDown("Talk With Haz") || Input.GetButtonDown("Talk With Zah"))
         {
+            // Cast a collider to check for a nearby NPC to interact with.
+            List<Collider> hits = new List<Collider>(Physics.OverlapSphere(gameObject.transform.position, 3));
+            hits.RemoveAll(hit => !hit.tag.Equals("NPC")); // Filter all non-NPC tagged objects out.
 
+
+            // Just take the first one to interact with, since none of them should be super closeby eachother,
+            // and all non-NPC tagged objects have been filtered out.
+            if (hits.Count > 0)
+            {
+                GameObject interactionTarget = hits[0].gameObject;
+                interactionTarget.GetComponent<NPCController>().StartTalk();
+                
+            }
         }
     }
 
