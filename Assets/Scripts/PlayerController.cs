@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
         float verticalInput = 0;
 
         // Check inputs.
+        // Movement.
         if (Input.GetButton("Horizontal")) // Negative = left, Positive = right
         {
             if (Input.GetAxisRaw("Horizontal") > 0)
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
                 horizontalInput -= playerSpeed;
             }
         }
-        // Check inputs.
+        
         if (Input.GetButton("Vertical")) // Negative = down, Positive = up
         {
             if (Input.GetAxisRaw("Vertical") > 0)
@@ -51,6 +52,12 @@ public class PlayerController : MonoBehaviour
         }
 
         tr.position = tr.position + new Vector3(horizontalInput * Time.deltaTime, 0.0f, verticalInput * Time.deltaTime);
+
+        // Interaction.
+        if (Input.GetButtonDown(""))
+        {
+
+        }
     }
 
     private void FixedUpdate()
