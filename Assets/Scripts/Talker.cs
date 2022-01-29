@@ -153,4 +153,9 @@ public class Talker : MonoBehaviour
     {
         currentState = State.Talking;
     }
+
+    public State GetState()
+    {
+        return currentState;
+    }
 }

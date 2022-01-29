@@ -29,30 +29,34 @@ public class PlayerController : MonoBehaviour
         float verticalInput = 0;
 
         // Check inputs.
-        // Movement.
-        if (Input.GetButton("Horizontal")) // Negative = left, Positive = right
+        // Movement (Can only move when not in a conversation).
+        if (talker.GetState() == Talker.State.Idle)
         {
-            if (Input.GetAxisRaw("Horizontal") > 0)
+            if (Input.GetButton("Horizontal")) // Negative = left, Positive = right
             {
-                horizontalInput += playerSpeed;
+                if (Input.GetAxisRaw("Horizontal") > 0)
+                {
+                    horizontalInput += playerSpeed;
+                }
+                else if (Input.GetAxisRaw("Horizontal") < 0)
+                {
+                    horizontalInput -= playerSpeed;
+                }
             }
-            else if (Input.GetAxisRaw("Horizontal") < 0)
+
+            if (Input.GetButton("Vertical")) // Negative = down, Positive = up
             {
-                horizontalInput -= playerSpeed;
+                if (Input.GetAxisRaw("Vertical") > 0)
+                {
+                    verticalInput += playerSpeed;
+                }
+                else if (Input.GetAxisRaw("Vertical") < 0)
+                {
+                    verticalInput -= playerSpeed;
+                }
             }
         }
         
-        if (Input.GetButton("Vertical")) // Negative = down, Positive = up
-        {
-            if (Input.GetAxisRaw("Vertical") > 0)
-            {
-                verticalInput += playerSpeed;
-            }
-            else if (Input.GetAxisRaw("Vertical") < 0)
-            {
-                verticalInput -= playerSpeed;
-            }
-        }
 
         tr.position = tr.position + new Vector3(horizontalInput * Time.deltaTime, 0.0f, verticalInput * Time.deltaTime);
 
@@ -74,14 +78,12 @@ public class PlayerController : MonoBehaviour
             {
                 GameObject interactionTarget = hits[0].gameObject;
                 interactionTarget.GetComponent<NPCController>().StartTalk();
-                
+                talker.SetIdleConversation();
             }
         }
     }
 
     private void FixedUpdate()
     {
-        // Apply change in movement, currently uses the old unity input system, going to try to avoid physics.
-
     }
 }
