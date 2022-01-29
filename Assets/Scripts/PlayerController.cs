@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     // Boolean dictionary, Keys are names for dialogue switches, values are booleans, just gonna store on 
     // the player for now for ease of access since they will always be in the scene and part of the conversation.
     Dictionary<string, bool> dialogueSwitches = new Dictionary<string, bool>
-    { 
+    {
         {"SSYLVISSTALKED", false},
         {"RHASTTALKED", false},
         {"RHASTTIP", false}
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        
+
 
         tr.position = tr.position + new Vector3(horizontalInput * Time.deltaTime, 0.0f, verticalInput * Time.deltaTime);
 
@@ -143,5 +143,10 @@ public class PlayerController : MonoBehaviour
     public void ActivateSwitch(string key)
     {
         dialogueSwitches[key] = true;
+    }
+
+    public bool CheckSwitch(string key)
+    {
+        return dialogueSwitches[key];
     }
 }
