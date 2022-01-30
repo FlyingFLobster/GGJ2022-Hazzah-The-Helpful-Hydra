@@ -12,7 +12,7 @@ public class Talker : MonoBehaviour
     private GameObject floatingText;
 
     // Dummy dialogue list, can slap in the system that Nick comes up with in here.
-    private string[] chatter = new string[] { "Blah blah", "Did you know?", "Some cats have thumbs. . .", "Crazy right?" };
+    [SerializeField] string[] chatter;
     private int currentChatter;
 
     private string text; // Text to be displayed.
@@ -28,7 +28,7 @@ public class Talker : MonoBehaviour
     private State currentState;
 
     // Audio Source for speech.
-    private AudioSource speech;
+    //private AudioSource[] speech;
 
 
     // Start is called before the first frame update
@@ -44,7 +44,7 @@ public class Talker : MonoBehaviour
         currentChatter = 0;
         text = chatter[currentChatter];
 
-        speech = GetComponentInChildren<AudioSource>();
+        //speech = GetComponentsInChildren<AudioSource>();
 
         Invoke("CycleChatter", 4.0f);
     }
@@ -82,9 +82,9 @@ public class Talker : MonoBehaviour
     }
 
     // Shows text in the text box over time.
-    private IEnumerator TextOverTime(string inText)
+    private IEnumerator TextOverTime(string inText, AudioSource voice)
     {
-        speech.Play();
+        voice.Play();
         string originalString = inText;
         int charCounter = 0;
         while (charCounter < originalString.Length)
@@ -101,7 +101,7 @@ public class Talker : MonoBehaviour
 
             yield return new WaitForSeconds(0.07f);
         }
-        speech.Stop();
+        voice.Stop();
         SetIdleConversation();
     }
 
@@ -129,18 +129,21 @@ public class Talker : MonoBehaviour
     }
 
     // Starts a talk over time routine for the character.
-    public void TalkText(string inText)
+    // Speaker will correspond to which voice to use (since some characters have multiple voices)
+    public void TalkText(string inText, string voiceName)
     {
         if (currentState != State.Talking)
         {
+            AudioSource voice = transform.Find(voiceName).gameObject.GetComponent<AudioSource>();
             SetTalking();
             text = "";
-            StartCoroutine(TextOverTime(inText));
+            StartCoroutine(TextOverTime(inText, voice));
         }
     }
 
     public void SetIdle()
     {
+        Debug.Log("SET TO IDLE");
         currentState = State.Idle;
     }
 
@@ -157,5 +160,10 @@ public class Talker : MonoBehaviour
     public State GetState()
     {
         return currentState;
+    }
+
+    public bool IsIdleConversation()
+    {
+        return currentState == State.IdleConversation;
     }
 }

@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
         transform.position = focus.transform.position + offset;
     }
 
-    void ChangeFocus(GameObject inFocus)
+    public void ChangeFocus(GameObject inFocus)
     {
         focus = inFocus;
     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCController : MonoBehaviour
-{   
+{
     private Talker talker;
 
     // Start is called before the first frame update

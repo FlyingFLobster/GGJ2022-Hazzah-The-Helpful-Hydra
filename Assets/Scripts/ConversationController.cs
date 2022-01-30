@@ -13,6 +13,7 @@ public class ConversationController : MonoBehaviour
     private GameObject npc;
 
     private GameObject camera; // For tracking the camera to the currently speaker character.
+
     private Dictionary<string, Dictionary<string, LineData>> lines;
     private LineData currentLine;
 
@@ -21,19 +22,34 @@ public class ConversationController : MonoBehaviour
     void Start()
     {
         // Load all the dialogue in this zone (currently there is only one zone and all actor codes are hardcoded)
-        lines = GetZoneLines("zone1");
+        lines = LineLoader.GetZoneLines("zone1");
+        Debug.Log("STARTED");
 
         // TODO: how does the ConversationController know which player and npc objects are involved?
 
         // Set the first line of the conversation - how is this known?
 
-
+        // Obtain reference to camera.
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    // Called upon first starting a conversation, retrieves the initial line of dialogue.
+    public void InitiateConversation(string playerChoice, string actorCode, string lineCode)
+    {
+        Debug.Log("INITIATED");
+        if (lines == null)
+        {
+            lines = LineLoader.GetZoneLines("zone1");
+        }
+        currentLine = lines[actorCode][lineCode];
+
+        player.GetComponent<Talker>().SetIdleConversation();
+        npc.GetComponent<Talker>().SetIdleConversation();
     }
 
     // This is called when the player presses the Haz or Zah buttons, which button is sent as a button Name.
@@ -43,43 +59,99 @@ public class ConversationController : MonoBehaviour
     public void AdvanceConversation(string playerChoice)
     {
         string switch_code;
-        LineData next_line;
+        LineData next_line = null;
 
-        // Find the next line of dialogue based on the switches, targets, and Haz/Zah player choice
-        // The final switch is always a dummy empty string ""
-        for (int i = 0; i < currentLine.switches_read.Count; i++)
+        if (player.GetComponent<Talker>().IsIdleConversation() && player.GetComponent<Talker>().IsIdleConversation())
         {
-            switch_code = currentLine.switches_read[i];
-
-            // If switch code is genuine, get its target if it is set to true, otherwise continue
-            if (switch_code != "")
+            //Debug.Log(currentLine.ToString());
+            if (currentLine.targets1[0] == "") // If no next line, conversation ends.
             {
-                if (GlobalSwitches[switch_code])
-                {
-                    next_line = ChooseWhichHead(playerChoice, i);
-                    break;
-                }
+                EndConversation();
             }
 
-            // If the fake switch ("") is reached, just get the target
-            next_line = ChooseWhichHead(playerChoice, i);
+            // Find the next line of dialogue based on the switches, targets, and Haz/Zah player choice
+            // The final switch is always a dummy empty string ""
+            for (int i = 0; i < currentLine.switches_read.Count; i++)
+            {
+                switch_code = currentLine.switches_read[i];
+
+                // If switch code is genuine, get its target if it is set to true, otherwise continue
+                if (switch_code != "")
+                {
+                    if (player.GetComponent<PlayerController>().CheckSwitch(switch_code))
+                    {
+                        next_line = ChooseWhichHead(playerChoice, i);
+                        break;
+                    }
+                }
+
+                // If the fake switch ("") is reached, just get the target
+                next_line = ChooseWhichHead(playerChoice, i);
+            }
+
+            if (next_line == null)
+            {
+                throw new MissingReferenceException("No next line found when advancing conversation.");
+            }
+
+
+            // Update switches due to the current line
+            foreach (string code in currentLine.switches_set_true)
+            {
+                player.GetComponent<PlayerController>().ActivateSwitch(code);
+            }
+            foreach (string code in currentLine.switches_set_false)
+            {
+                player.GetComponent<PlayerController>().DeactivateSwitch(code);
+            }
+
+            // Update the current line
+            currentLine = next_line;
+
+            // Where to send the text of the new line?
+            // This will depend on who is speaking, each character has a talker component that it needs to get sent to.
+            // Probably going to need to look at the actor code to figure that out.
+
+            // Clear the text from both characters (Since we should probably only have one talking at a time)
+            player.GetComponent<Talker>().ClearText();
+            npc.GetComponent<Talker>().ClearText();
+
+            // Check if there is a decision to be made and if so, display the button prompts.
+            if (currentLine.targets2[0] != "")
+            {
+                player.GetComponent<PlayerController>().ShowPrompts();
+            }
+            else // Else, display the generic dual prompt.
+            {
+                player.GetComponent<PlayerController>().ShowDualPrompt();
+            }
+
+            // Figure out who the current line belongs to and send it to them.
+            // New part of json, speaker field will define the character who is speaking the current line,
+            // Can use that to switch based on the character (need special cases for double characters).
+
+            // Can probably remove the cases for Haz and Floop since they should default to VoiceHolder1 anyway, but I'll keep them just in case.
+            if (currentLine.speaker == "haz")
+            {
+                player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+            }
+            else if (currentLine.speaker == "zah")
+            {
+                player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+            }
+            else if (currentLine.speaker == "floop")
+            {
+                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+            }
+            else if (currentLine.speaker == "robert")
+            {
+                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+            }
+            else // Any other NPC
+            {
+                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+            }
         }
-
-
-        // Update switches due to the current line
-        foreach (string switch_code in currentLine.switches_set_true)
-        {
-            GlobalSwitches[switch_code] = true;
-        }
-        foreach (string switch_code in currentLine.switches_set_false)
-        {
-            GlobalSwitches[switch_code] = false;
-        }
-
-        // Update the current line
-        currentLine = next_line;
-
-        // Where to send the text of the new line?
     }
 
     private LineData ChooseWhichHead(string playerChoice, int switchIdx)
@@ -91,13 +163,26 @@ public class ConversationController : MonoBehaviour
         if (currentLine.targets2[switchIdx] == "")
         {
             next_line_code = currentLine.targets1[switchIdx];
-            next_line = lines[next_line_code];
+            // ^ This is in the form of "actor_code/linecode" right now I think, so need to split it into two strings.
+            
         }
         // If there are two, consider the player's input choice
         else
         {
             next_line_code = (playerChoice == "Talk With Haz") ? currentLine.targets1[switchIdx] : currentLine.targets2[switchIdx];
-            next_line = lines[next_line_code];
+            
+        }
+
+        string[] codes = next_line_code.Split('/');
+        string actorCode = codes[0];
+        string lineCode = codes[1];
+        try
+        {
+            next_line = lines[actorCode][lineCode];
+        }
+        catch(KeyNotFoundException)
+        {
+            throw new KeyNotFoundException("Key not found in lines: " + actorCode + "/" + lineCode);
         }
 
         return next_line;
@@ -110,6 +195,8 @@ public class ConversationController : MonoBehaviour
         // Call EndConversation methods on Player and NPC.
         player.GetComponent<PlayerController>().EndConversation();
         npc.GetComponent<NPCController>().EndConversation();
+        //camera.GetComponent<CameraController>().ChangeFocus(player);
+        Destroy(gameObject);
     }
 
     // These should be called as soon as the conversation controller is instantiated, to prevent unruly behaviour.
