@@ -132,14 +132,18 @@ public class PlayerController : MonoBehaviour
                     //interactionTarget.GetComponent<NPCController>().StartTalk();
                     //talker.SetIdleConversation();
 
+                    // Get the codes from the NPC for their dialogue initiating line.
+                    string actorCode = interactionTarget.GetComponent<NPCController>().GetActorCode();
+                    string lineCode = interactionTarget.GetComponent<NPCController>().GetInitialLineCode();
+
                     // Call initial dialogue to start the conversation with Haz or Zah.
                     if (hazTalk)
                     {
-                        conv.AdvanceConversation("Talk With Haz");
+                        conv.InitiateConversation("Talk With Haz", actorCode, lineCode);
                     }
                     else
                     {
-                        conv.AdvanceConversation("Talk With Zah");
+                        conv.InitiateConversation("Talk With Zah", actorCode, lineCode);
                     }
                 }
             }
