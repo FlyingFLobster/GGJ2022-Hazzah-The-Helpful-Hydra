@@ -23,7 +23,7 @@ public class ConversationController : MonoBehaviour
     {
         // Load all the dialogue in this zone (currently there is only one zone and all actor codes are hardcoded)
         lines = LineLoader.GetZoneLines("zone1");
-        Debug.Log("STARTED");
+        //Debug.Log("STARTED");
 
         // TODO: how does the ConversationController know which player and npc objects are involved?
 
@@ -62,8 +62,10 @@ public class ConversationController : MonoBehaviour
     {
         string switch_code;
         LineData next_line = null;
+        //Debug.Log(currentLine.switches_set_true.ToString());
+        
 
-        if (player.GetComponent<Talker>().IsIdleConversation() && player.GetComponent<Talker>().IsIdleConversation())
+        if (player.GetComponent<Talker>().IsIdleConversation() && npc.GetComponent<Talker>().IsIdleConversation())
         {
             //Debug.Log(currentLine.ToString());
             if (currentLine.targets1[0] == "") // If no next line, conversation ends.
@@ -99,23 +101,13 @@ public class ConversationController : MonoBehaviour
 
             if (next_line == null)
             {
-                Debug.Log("No next line found when advancing conversation.");
+                //Debug.Log("No next line found when advancing conversation.");
 
                 // Probably just kill the conversation for safety
                 EndConversation();
             }
             else
             {
-                // Update switches due to the current line
-                foreach (string code in currentLine.switches_set_true)
-                {
-                    player.GetComponent<PlayerController>().ActivateSwitch(code);
-                }
-                foreach (string code in currentLine.switches_set_false)
-                {
-                    player.GetComponent<PlayerController>().DeactivateSwitch(code);
-                }
-
                 // Update the current line
                 currentLine = next_line;
 
@@ -203,6 +195,17 @@ public class ConversationController : MonoBehaviour
         {
             next_line = null;
             Debug.Log("Next line code: " + next_line_code);
+            // Update switches due to the current line
+            foreach (string code in currentLine.switches_set_true)
+            {
+                //Debug.Log("HERE");
+                player.GetComponent<PlayerController>().ActivateSwitch(code);
+            }
+            foreach (string code in currentLine.switches_set_false)
+            {
+                player.GetComponent<PlayerController>().DeactivateSwitch(code);
+            }
+            EndConversation();
         }
 
 

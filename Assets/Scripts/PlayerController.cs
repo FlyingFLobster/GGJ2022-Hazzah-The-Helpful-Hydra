@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     private GameObject promptZah;
     private GameObject promptDual;
 
+    private Animator animator;
+    private GameObject footstepPlayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,9 @@ public class PlayerController : MonoBehaviour
         promptHaz = gameObject.transform.Find("Haz Prompt").gameObject;
         promptZah = gameObject.transform.Find("Zah Prompt").gameObject;
         promptDual = gameObject.transform.Find("Dual Prompt").gameObject;
+
+        animator = GetComponent<Animator>();
+        footstepPlayer = transform.Find("FootstepPlayer").gameObject;
 
         // Disable the interact prompts (should only be visible when in a situation where they can be pressed).
         HidePrompts();
@@ -67,11 +73,16 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetAxisRaw("Horizontal") > 0)
                 {
                     horizontalInput += playerSpeed;
+                    tr.localScale = new Vector3(0.5f, tr.localScale.y, tr.localScale.z);
                 }
                 else if (Input.GetAxisRaw("Horizontal") < 0)
                 {
                     horizontalInput -= playerSpeed;
+                    tr.localScale = new Vector3(-0.5f, tr.localScale.y, tr.localScale.z);
                 }
+
+                animator.SetBool("moving", true);
+                footstepPlayer.GetComponent<MusicController>().Play();
             }
 
             if (Input.GetButton("Vertical")) // Negative = down, Positive = up
@@ -84,7 +95,17 @@ public class PlayerController : MonoBehaviour
                 {
                     verticalInput -= playerSpeed;
                 }
+
+                animator.SetBool("moving", true);
+                footstepPlayer.GetComponent<MusicController>().Play();
             }
+        }
+
+        if (!Input.GetButton("Horizontal") && !Input.GetButton("Vertical"))
+        {
+            animator.SetBool("moving", false);
+            footstepPlayer.GetComponent<MusicController>().Stop();
+            tr.localScale = new Vector3(0.5f, tr.localScale.y, tr.localScale.z);
         }
 
 

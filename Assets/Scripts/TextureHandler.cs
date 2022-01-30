@@ -12,8 +12,15 @@ public class TextureHandler : MonoBehaviour
 
     private Renderer renderer;
 
+
     // Start is called before the first frame update
     void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         // Get renderer from GameObject.
         renderer = GetComponent<Renderer>();
@@ -24,7 +31,7 @@ public class TextureHandler : MonoBehaviour
         // Apply texture to base map of material.
         renderer.material.SetTexture("_BaseMap", texture);
 
-        
+
         // Resize object to texture dimensions.
         int width = texture.width;
         int height = texture.height;
@@ -42,11 +49,5 @@ public class TextureHandler : MonoBehaviour
         //Debug.Log("Aspect Ratio: " + aspectRatio + "\nz: " + newScale.z + "\n new x: " + newScale.x);
 
         transform.localScale = newScale;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

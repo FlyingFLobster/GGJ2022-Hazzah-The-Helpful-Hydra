@@ -24,12 +24,18 @@ public class MusicController : MonoBehaviour
 
     public void Play()
     {
-        mainSong.Play();
+        if (!mainSong.isPlaying)
+        {
+            mainSong.Play();
+        }
     }
 
     public void Stop()
     {
-        mainSong.Stop();
+        if (mainSong.isPlaying)
+        {
+            mainSong.Stop();
+        }
     }
 
     public void SetSong(AudioSource inSong)
