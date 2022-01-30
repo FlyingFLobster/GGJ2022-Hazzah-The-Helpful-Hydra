@@ -21,4 +21,25 @@ public class MusicController : MonoBehaviour
     {
         
     }
+
+    public void Play()
+    {
+        mainSong.Play();
+    }
+
+    public void Stop()
+    {
+        mainSong.Stop();
+    }
+
+    public void SetSong(AudioSource inSong)
+    {
+        // If the song isn't new, don't do anything (If this check wasn't here it'd restart)
+        if (!inSong.Equals(mainSong))
+        {
+            Stop(); // Make sure the original stops playing before the reference is discarded.
+            mainSong = inSong;
+            Play();
+        }
+    }
 }

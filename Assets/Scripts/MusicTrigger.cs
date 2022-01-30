@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class MusicTrigger : MonoBehaviour
 {
-    [SerializeField] AudioSource music;
+    private AudioSource music;
+
+    private void Start()
+    {
+        music = GetComponent<AudioSource>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (!other.gameObject.GetComponent<PlayerController>()) // If intro hasn't been watched yet.
-            {
-                
-            }
+            // Get Player's music player
+            GameObject musicPlayer = other.gameObject.transform.Find("MusicPlayer").gameObject;
+            musicPlayer.GetComponent<MusicController>().SetSong(music);
         }
     }
 }

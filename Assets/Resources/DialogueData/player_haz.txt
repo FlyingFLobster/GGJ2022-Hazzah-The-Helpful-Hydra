@@ -1,4 +1,12 @@
 [
+{ "code": "intro0", 
+          "speaker": "haz",
+	  "text": "",
+	  "switches_read": [""],
+	  "targets1": ["player_haz/intro1"],
+	  "targets2": [""],
+	  "switches_set_true": [],
+	  "switches_set_false": []},
 	{ "code": "intro1", 
           "speaker": "haz",
 	  "text": "I LOVE Mondays!",
@@ -43,7 +51,7 @@
           "speaker": "haz",
 	  "text": "Ooo, I wonder who we’ll help today-",
 	  "switches_read": [""],
-	  "targets1": ["npc_ssylviss/intro6"],
+	  "targets1": ["npc_ssylviss/intro1"],
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
@@ -55,14 +63,13 @@
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
-] 
-[
+
 	{ "code": "ssylviss_interact", 
-          "speaker": "",
+          "speaker": "haz",
 	  "text": "",
-	  "switches_read": ["ssylviss_exposed/ssylviss_talked_to", ""],
-	  "targets1": ["player_haz/se1", ],
-	  "targets2": ["player_haz/sw1", ],
+	  "switches_read": ["ssylviss_exposed", "ssylviss_talked_to", ""],
+	  "targets1": ["player_haz/se1", "player_haz/sw1", "player_haz/sf1"],
+	  "targets2": ["player_zah/se1", "player_zah/sw1", "player_zah/sf1"],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
 	{ "code": "sf1", 
@@ -111,10 +118,9 @@
 	  "switches_read": [""],
 	  "targets1": [""],
 	  "targets2": [""],
-	  "switches_set_true": [ssylviss_talked_to],
+	  "switches_set_true": ["ssylviss_talked_to"],
 	  "switches_set_false": []},
-] 
-[
+
 	{ "code": "sw1", 
           "speaker": "haz",
 	  "text": "Um, hello, sorry. I think I forgot what you asked me to do.",

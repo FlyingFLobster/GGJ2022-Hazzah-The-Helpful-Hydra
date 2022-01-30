@@ -47,15 +47,13 @@
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
-] 
-[
+
 	{ "code": "ssylviss_interact", 
-          "speaker": "",
+          "speaker": "zah",
 	  "text": "",
-	  "switches_read": ["ssylviss_exposed/ssylviss_talked_to"],
-	  "targets1": ["player_zah/se1"],
-	  "targets2": ["player_zah/sw1"],
-	  "targets3": ["player_zah/sf1"],
+	  "switches_read": ["ssylviss_exposed", "ssylviss_talked_to", ""],
+	  "targets1": ["player_haz/se1", "player_haz/sw1", "player_haz/sf1"],
+	  "targets2": ["player_zah/se1", "player_zah/sw1", "player_zah/sf1"],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
 	{ "code": "sf1", 
@@ -104,10 +102,9 @@
 	  "switches_read": [""],
 	  "targets1": [""],
 	  "targets2": [""],
-	  "switches_set_true": [ssylviss_talked_to],
+	  "switches_set_true": ["ssylviss_talked_to"],
 	  "switches_set_false": []},
-]
-[
+
 	{ "code": "sw2", 
           "speaker": "zah",
 	  "text": "Sooo... are you gonna help us find your bag?",

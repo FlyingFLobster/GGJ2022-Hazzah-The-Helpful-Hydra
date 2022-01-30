@@ -85,8 +85,14 @@ public class ConversationController : MonoBehaviour
                         next_line = ChooseWhichHead(playerChoice, i);
                         break;
                     }
+                    else
+                    {
+                        continue;
+                    }
                 }
+                //Debug.Log("Switch Code: " + switch_code + ", CheckSwitch Result: " + player.GetComponent<PlayerController>().CheckSwitch(switch_code));
 
+                //Debug.Log("HERE");
                 // If the fake switch ("") is reached, just get the target
                 next_line = ChooseWhichHead(playerChoice, i);
             }
