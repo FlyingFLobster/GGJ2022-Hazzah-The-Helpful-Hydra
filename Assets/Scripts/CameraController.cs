@@ -8,9 +8,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public GameObject focus; // Object that the camera will focus on, could be changed to focus on NPCs during dialogue.
+    [SerializeField] private GameObject focus; // Object that the camera will focus on, could be changed to focus on NPCs during dialogue.
 
-    private Vector3 offset; // Offset of the camera's position from its focus
+    private Vector3 offset; // Offset of the camera's position from its focus.
+    private int horizontalModifer; // Modifies the offset horizontally.
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +22,13 @@ public class CameraController : MonoBehaviour
     // Late Update is called once per frame but after the regular Update call (for scripts that rely on other scripts already being updated).
     void LateUpdate()
     {
-        transform.position = focus.transform.position + offset;
+        Vector3 modifiedOffset = new Vector3(offset.x + horizontalModifer, offset.y, offset.z);
+        transform.position = focus.transform.position + modifiedOffset;
     }
 
-    public void ChangeFocus(GameObject inFocus)
+    public void ChangeFocus(GameObject inFocus, int inHorizontalModifier = 0)
     {
         focus = inFocus;
+        horizontalModifer = inHorizontalModifier;
     }
 }

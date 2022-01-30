@@ -136,23 +136,30 @@ public class ConversationController : MonoBehaviour
                 // Can probably remove the cases for Haz and Floop since they should default to VoiceHolder1 anyway, but I'll keep them just in case.
                 if (currentLine.speaker == "haz")
                 {
+                    //player.GetComponent<Talker>().SetTextColor(new Color(247, 101, 120)); F76578 
                     player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                    camera.GetComponent<CameraController>().ChangeFocus(player, -1);
                 }
                 else if (currentLine.speaker == "zah")
                 {
+                    //player.GetComponent<Talker>().SetTextColor(new Color(170, 225, 255)); #AAE1FF
                     player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+                    camera.GetComponent<CameraController>().ChangeFocus(player, 1);
                 }
                 else if (currentLine.speaker == "floop")
                 {
                     npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                    camera.GetComponent<CameraController>().ChangeFocus(npc);
                 }
                 else if (currentLine.speaker == "robert")
                 {
                     npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+                    camera.GetComponent<CameraController>().ChangeFocus(npc);
                 }
                 else // Any other NPC
                 {
                     npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                    camera.GetComponent<CameraController>().ChangeFocus(npc);
                 }
             }
         }
@@ -235,5 +242,10 @@ public class ConversationController : MonoBehaviour
     {
         npc = inNPC;
         npc.GetComponent<Talker>().SetIdleConversation();
+    }
+
+    public void SetCamera(GameObject inCamera)
+    {
+        camera = inCamera;
     }
 }

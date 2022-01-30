@@ -180,6 +180,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 09682ece018ee3842814f02672627273, type: 3}
+--- !u!1 &489737880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2907423879241612899, guid: 3b51836ac62c2794fa5c314b1d003e70, type: 3}
+  m_PrefabInstance: {fileID: 2907423878938555643}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1189963852
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,7 +775,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3230005962832020364, guid: d9fb134e16c7eb54db50281bed5cf4be, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3230005962832020365, guid: d9fb134e16c7eb54db50281bed5cf4be, type: 3}
       propertyPath: Ssylviss
@@ -807,7 +812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1523415465829743767, guid: b5530f18e2a2d6e44bbbb704c84968d6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7.77
+      value: 52.4
       objectReference: {fileID: 0}
     - target: {fileID: 1523415465829743767, guid: b5530f18e2a2d6e44bbbb704c84968d6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1030,6 +1035,10 @@ PrefabInstance:
       propertyPath: texture
       value: 
       objectReference: {fileID: 2800000, guid: 783ebc0452ff54e41b12ecb25ea66997, type: 3}
+    - target: {fileID: 4702140171949646569, guid: 72610900b0cd6c94d8d328fb56b8b928, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 489737880}
     - target: {fileID: 4702140171949646570, guid: 72610900b0cd6c94d8d328fb56b8b928, type: 3}
       propertyPath: m_RootOrder
       value: 13

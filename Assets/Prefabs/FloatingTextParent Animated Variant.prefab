@@ -59,6 +59,10 @@ PrefabInstance:
       propertyPath: m_FontSize
       value: 80
       objectReference: {fileID: 0}
+    - target: {fileID: 7188720663973244425, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
+      propertyPath: m_Color.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7288911688922426048, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0

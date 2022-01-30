@@ -8,6 +8,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject ConversationControllerPrefab;
+    [SerializeField] private GameObject mainCamera;
+
     public int playerSpeed = 0;
 
     private Rigidbody rb;
@@ -149,6 +151,7 @@ public class PlayerController : MonoBehaviour
 
                     conv.SetPlayer(gameObject);
                     conv.SetNPC(interactionTarget);
+                    conv.SetCamera(mainCamera);
 
                     //interactionTarget.GetComponent<NPCController>().StartTalk();
                     //talker.SetIdleConversation();
@@ -192,6 +195,8 @@ public class PlayerController : MonoBehaviour
         conv = null;
         HidePrompts();
         HideDualPrompt();
+
+        mainCamera.GetComponent<CameraController>().ChangeFocus(gameObject);
     }
 
     // Takes in a key for the dictionary of dialogue switches and sets it to true.
@@ -270,6 +275,9 @@ public class PlayerController : MonoBehaviour
         conv.SetPlayer(gameObject);
 
         conv.SetNPC(Ssylviss);
+
+        conv.SetCamera(mainCamera);
+
         conv.InitiateConversation("Talk With Haz", "player_haz", "intro0");
     }
 }

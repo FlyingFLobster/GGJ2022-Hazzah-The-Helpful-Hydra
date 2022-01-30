@@ -16,6 +16,7 @@ public class Talker : MonoBehaviour
     private int currentChatter;
 
     private string text; // Text to be displayed.
+    private Color textColor;
 
     // Enum of states talkers can be in, helps determine some behaviour.
     public enum State
@@ -61,9 +62,9 @@ public class Talker : MonoBehaviour
         Vector3 floatingTextPosition = transform.position;
         floatingTextPosition.y = GetComponent<Collider>().bounds.size.y;
         floatingText.transform.position = floatingTextPosition;
-
         ShowFloatingDialogue();
     }
+
 
     public void ShowFloatingDialogue()
     {
@@ -87,6 +88,7 @@ public class Talker : MonoBehaviour
         voice.Play();
         string originalString = inText;
         int charCounter = 0;
+
         while (charCounter < originalString.Length)
         {
 
@@ -143,7 +145,7 @@ public class Talker : MonoBehaviour
 
     public void SetIdle()
     {
-        Debug.Log("SET TO IDLE");
+        //Debug.Log("SET TO IDLE");
         currentState = State.Idle;
     }
 
@@ -155,6 +157,11 @@ public class Talker : MonoBehaviour
     public void SetTalking()
     {
         currentState = State.Talking;
+    }
+
+    public void SetTextColor(Color inColor)
+    {
+        textColor = inColor;
     }
 
     public State GetState()

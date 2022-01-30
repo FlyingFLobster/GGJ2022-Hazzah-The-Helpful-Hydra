@@ -3,7 +3,7 @@
           "speaker": "ssylviss",
 	  "text": "H-heeeelp!",
 	  "switches_read": [""],
-	  "targets1": ["player_haz/intro6"],
+	  "targets1": ["player_haz/intro7"],
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
