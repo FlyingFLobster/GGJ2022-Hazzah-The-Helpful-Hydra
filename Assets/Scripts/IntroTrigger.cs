@@ -11,7 +11,11 @@ public class IntroTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<PlayerController>().IntroConversation(Ssylviss);
+            if (!other.gameObject.GetComponent<PlayerController>().CheckSwitch("introwatched")) // If intro hasn't been watched yet.
+            {
+                other.gameObject.GetComponent<PlayerController>().IntroConversation(Ssylviss);
+                other.gameObject.GetComponent<PlayerController>().ActivateSwitch("introwatched");
+            }
         }
     }
 }

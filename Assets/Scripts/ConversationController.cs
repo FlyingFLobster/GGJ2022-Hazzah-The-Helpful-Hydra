@@ -91,65 +91,69 @@ public class ConversationController : MonoBehaviour
 
             if (next_line == null)
             {
-                throw new MissingReferenceException("No next line found when advancing conversation.");
-            }
+                Debug.Log("No next line found when advancing conversation.");
 
+                // Probably just kill the conversation for safety
+                EndConversation();
+            }
+            else
+            {
+                // Update switches due to the current line
+                foreach (string code in currentLine.switches_set_true)
+                {
+                    player.GetComponent<PlayerController>().ActivateSwitch(code);
+                }
+                foreach (string code in currentLine.switches_set_false)
+                {
+                    player.GetComponent<PlayerController>().DeactivateSwitch(code);
+                }
 
-            // Update switches due to the current line
-            foreach (string code in currentLine.switches_set_true)
-            {
-                player.GetComponent<PlayerController>().ActivateSwitch(code);
-            }
-            foreach (string code in currentLine.switches_set_false)
-            {
-                player.GetComponent<PlayerController>().DeactivateSwitch(code);
-            }
+                // Update the current line
+                currentLine = next_line;
 
-            // Update the current line
-            currentLine = next_line;
+                // Where to send the text of the new line?
+                // This will depend on who is speaking, each character has a talker component that it needs to get sent to.
+                // Probably going to need to look at the actor code to figure that out.
 
-            // Where to send the text of the new line?
-            // This will depend on who is speaking, each character has a talker component that it needs to get sent to.
-            // Probably going to need to look at the actor code to figure that out.
+                // Clear the text from both characters (Since we should probably only have one talking at a time)
+                player.GetComponent<Talker>().ClearText();
+                npc.GetComponent<Talker>().ClearText();
 
-            // Clear the text from both characters (Since we should probably only have one talking at a time)
-            player.GetComponent<Talker>().ClearText();
-            npc.GetComponent<Talker>().ClearText();
+                // Check if there is a decision to be made and if so, display the button prompts.
+                if (currentLine.targets2[0] != "")
+                {
+                    player.GetComponent<PlayerController>().ShowPrompts();
+                }
+                else // Else, display the generic dual prompt.
+                {
+                    player.GetComponent<PlayerController>().ShowDualPrompt();
+                }
 
-            // Check if there is a decision to be made and if so, display the button prompts.
-            if (currentLine.targets2[0] != "")
-            {
-                player.GetComponent<PlayerController>().ShowPrompts();
-            }
-            else // Else, display the generic dual prompt.
-            {
-                player.GetComponent<PlayerController>().ShowDualPrompt();
-            }
+                // Figure out who the current line belongs to and send it to them.
+                // New part of json, speaker field will define the character who is speaking the current line,
+                // Can use that to switch based on the character (need special cases for double characters).
 
-            // Figure out who the current line belongs to and send it to them.
-            // New part of json, speaker field will define the character who is speaking the current line,
-            // Can use that to switch based on the character (need special cases for double characters).
-
-            // Can probably remove the cases for Haz and Floop since they should default to VoiceHolder1 anyway, but I'll keep them just in case.
-            if (currentLine.speaker == "haz")
-            {
-                player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
-            }
-            else if (currentLine.speaker == "zah")
-            {
-                player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
-            }
-            else if (currentLine.speaker == "floop")
-            {
-                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
-            }
-            else if (currentLine.speaker == "robert")
-            {
-                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
-            }
-            else // Any other NPC
-            {
-                npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                // Can probably remove the cases for Haz and Floop since they should default to VoiceHolder1 anyway, but I'll keep them just in case.
+                if (currentLine.speaker == "haz")
+                {
+                    player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                }
+                else if (currentLine.speaker == "zah")
+                {
+                    player.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+                }
+                else if (currentLine.speaker == "floop")
+                {
+                    npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                }
+                else if (currentLine.speaker == "robert")
+                {
+                    npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder2");
+                }
+                else // Any other NPC
+                {
+                    npc.GetComponent<Talker>().TalkText(currentLine.text, "VoiceHolder1");
+                }
             }
         }
     }
@@ -174,16 +178,26 @@ public class ConversationController : MonoBehaviour
         }
 
         string[] codes = next_line_code.Split('/');
-        string actorCode = codes[0];
-        string lineCode = codes[1];
-        try
+        if (next_line_code != "")
         {
-            next_line = lines[actorCode][lineCode];
+            string actorCode = codes[0];
+            string lineCode = codes[1];
+            try
+            {
+                next_line = lines[actorCode][lineCode];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new KeyNotFoundException("Key not found in lines: " + actorCode + "/" + lineCode);
+            }
         }
-        catch(KeyNotFoundException)
+        else
         {
-            throw new KeyNotFoundException("Key not found in lines: " + actorCode + "/" + lineCode);
+            next_line = null;
+            Debug.Log("Next line code: " + next_line_code);
         }
+
+
 
         return next_line;
     }
