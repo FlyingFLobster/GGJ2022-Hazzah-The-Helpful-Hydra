@@ -7,8 +7,6 @@
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
-]
-[
 	{ "code": "sf1", 
           "speaker": "ssylviss",
 	  "text": "Oh, thank you good sir! Er...sirs.",
@@ -105,8 +103,6 @@
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
-]
-[
 	{ "code": "sw1.1", 
           "speaker": "ssylviss",
 	  "text": "Aww, aren't you adorably useless.",

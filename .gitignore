@@ -39,3 +39,4 @@ Properties
 bin
 obj
 /Assets/DialogueData/*.bak
+*.meta

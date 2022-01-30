@@ -47,8 +47,6 @@
 	  "targets2": [""],
 	  "switches_set_true": [],
 	  "switches_set_false": []},
-] 
-[
 	{ "code": "ssylviss_interact", 
           "speaker": "",
 	  "text": "",
@@ -104,10 +102,8 @@
 	  "switches_read": [""],
 	  "targets1": [""],
 	  "targets2": [""],
-	  "switches_set_true": [ssylviss_talked_to],
+	  "switches_set_true": ["ssylviss_talked_to"],
 	  "switches_set_false": []},
-]
-[
 	{ "code": "sw2", 
           "speaker": "zah",
 	  "text": "Sooo... are you gonna help us find your bag?",
