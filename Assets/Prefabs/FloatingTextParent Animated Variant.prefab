@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3083791871109270800, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
       propertyPath: m_Name
-      value: FloatingTextParent
+      value: FloatingTextParent Animated Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3924205273103513298, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
       propertyPath: m_RootOrder
@@ -54,6 +54,10 @@ PrefabInstance:
     - target: {fileID: 3924205273103513298, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7188720663973244425, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
+      propertyPath: m_FontSize
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7288911688922426048, guid: 5c2cd9b2c8cab3b4c90a7752fceaf469, type: 3}
       propertyPath: m_LocalPosition.y

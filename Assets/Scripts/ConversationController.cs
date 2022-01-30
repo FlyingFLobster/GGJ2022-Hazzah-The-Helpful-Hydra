@@ -50,6 +50,8 @@ public class ConversationController : MonoBehaviour
 
         player.GetComponent<Talker>().SetIdleConversation();
         npc.GetComponent<Talker>().SetIdleConversation();
+
+        AdvanceConversation(playerChoice);
     }
 
     // This is called when the player presses the Haz or Zah buttons, which button is sent as a button Name.
