@@ -40,3 +40,4 @@ bin
 obj
 /Assets/DialogueData/*.bak
 *.meta
+/Logs/*.log
