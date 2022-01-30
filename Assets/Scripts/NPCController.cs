@@ -6,7 +6,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCController : MonoBehaviour
-{   
+{
+    [SerializeField] private string actorCode;
+    [SerializeField] private string initialLineCode;
+
     private Talker talker;
 
     // Start is called before the first frame update
@@ -35,5 +38,15 @@ public class NPCController : MonoBehaviour
     public void EndConversation()
     {
         talker.SetIdle();
+    }
+
+    public string GetActorCode()
+    {
+        return actorCode;
+    }
+
+    public string GetInitialLineCode()
+    {
+        return initialLineCode;
     }
 }

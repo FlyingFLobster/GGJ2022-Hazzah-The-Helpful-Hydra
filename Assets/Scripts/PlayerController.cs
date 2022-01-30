@@ -16,18 +16,23 @@ public class PlayerController : MonoBehaviour
 
     // Boolean dictionary, Keys are names for dialogue switches, values are booleans, just gonna store on 
     // the player for now for ease of access since they will always be in the scene and part of the conversation.
-    Dictionary<string, bool> dialogueSwitches = new Dictionary<string, bool>
+    Dictionary<string, bool> dialogueSwitches = new Dictionary<string, bool>();
+
+    /*
+     * 
     {
         {"SSYLVISSTALKED", false},
         {"RHASTTALKED", false},
         {"RHASTTIP", false}
     };
+     */
 
     private ConversationController conv;
 
     // The two interact prompts.
     private GameObject promptHaz;
     private GameObject promptZah;
+    private GameObject promptDual;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +46,8 @@ public class PlayerController : MonoBehaviour
         // Get References to interact prompts.
         promptHaz = gameObject.transform.Find("Haz Prompt").gameObject;
         promptZah = gameObject.transform.Find("Zah Prompt").gameObject;
+        promptDual = gameObject.transform.Find("Dual Prompt").gameObject;
+
         // Disable the interact prompts (should only be visible when in a situation where they can be pressed).
         HidePrompts();
     }
@@ -93,9 +100,10 @@ public class PlayerController : MonoBehaviour
         {
             ShowPrompts();
         }
-        else
+        else if (talker.GetState() == Talker.State.Idle)
         {
             HidePrompts();
+            HideDualPrompt();
         }
 
         // Interaction.
@@ -124,14 +132,18 @@ public class PlayerController : MonoBehaviour
                     //interactionTarget.GetComponent<NPCController>().StartTalk();
                     //talker.SetIdleConversation();
 
+                    // Get the codes from the NPC for their dialogue initiating line.
+                    string actorCode = interactionTarget.GetComponent<NPCController>().GetActorCode();
+                    string lineCode = interactionTarget.GetComponent<NPCController>().GetInitialLineCode();
+
                     // Call initial dialogue to start the conversation with Haz or Zah.
                     if (hazTalk)
                     {
-                        conv.AdvanceConversation("Talk With Haz");
+                        conv.InitiateConversation("Talk With Haz", actorCode, lineCode);
                     }
                     else
                     {
-                        conv.AdvanceConversation("Talk With Zah");
+                        conv.InitiateConversation("Talk With Zah", actorCode, lineCode);
                     }
                 }
             }
@@ -157,29 +169,86 @@ public class PlayerController : MonoBehaviour
     {
         talker.SetIdle();
         conv = null;
+        HidePrompts();
+        HideDualPrompt();
     }
 
     // Takes in a key for the dictionary of dialogue switches and sets it to true.
     public void ActivateSwitch(string key)
     {
-        dialogueSwitches[key] = true;
+        bool value;
+        if (dialogueSwitches.TryGetValue(key, out value))
+        {
+            dialogueSwitches[key] = true;
+        }
+        else
+        {
+            dialogueSwitches.Add(key, true);
+        }
+    }
+
+    public void DeactivateSwitch(string key)
+    {
+        bool value;
+        if (dialogueSwitches.TryGetValue(key, out value))
+        {
+            dialogueSwitches[key] = false;
+        }
+        else
+        {
+            dialogueSwitches.Add(key, false);
+        }
     }
 
     public bool CheckSwitch(string key)
     {
-        return dialogueSwitches[key];
+        bool value;
+        bool result;
+        if (dialogueSwitches.TryGetValue(key, out value))
+        {
+            result = dialogueSwitches[key];
+        }
+        else
+        {
+            dialogueSwitches.Add(key, false);
+            result = false;
+        }
+        return result;
     }
 
     // These two hide and display the Haz/Zah prompts above the player's head, indicating that they can do something.
     public void ShowPrompts()
     {
+        HideDualPrompt();
         promptHaz.SetActive(true);
         promptZah.SetActive(true);
+    }
+
+    public void ShowDualPrompt()
+    {
+        HidePrompts();
+        promptDual.SetActive(true);
     }
 
     public void HidePrompts()
     {
         promptHaz.SetActive(false);
         promptZah.SetActive(false);
+    }
+
+    public void HideDualPrompt()
+    {
+        promptDual.SetActive(false);
+    }
+
+    // Special case since the character is technically talking to themself, this is activated by a trigger.
+    public void IntroConversation(GameObject Ssylviss)
+    {
+        conv = Instantiate(ConversationControllerPrefab, transform.position, Quaternion.identity).GetComponent<ConversationController>();
+
+        conv.SetPlayer(gameObject);
+
+        conv.SetNPC(Ssylviss);
+        conv.InitiateConversation("Talk With Haz", "player_haz", "intro0");
     }
 }
