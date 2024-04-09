@@ -1,3 +1,5 @@
+<video src="https://github.com/FlyingFLobster/GGJ2022-Hazzah-The-Helpful-Hydra/blob/main/Hazzah%20Gameplay.mp4" width="300" />
+
 Global Game Jam 2022 project: Hazzah The Helpful Hydra  
 Theme: Duality  
 Unity Project, should be runnable and compilable using the Unity editor.  
