@@ -1,4 +1,8 @@
-<video src="https://github.com/FlyingFLobster/GGJ2022-Hazzah-The-Helpful-Hydra/blob/main/Hazzah%20Gameplay.mp4" width="300" />
+
+
+
+https://github.com/FlyingFLobster/GGJ2022-Hazzah-The-Helpful-Hydra/assets/34440763/4317cb34-b993-4088-b1ac-3dc669fafbce
+
 
 Global Game Jam 2022 project: Hazzah The Helpful Hydra  
 Theme: Duality  
@@ -15,7 +19,7 @@ Actions: While near an NPC, press A to tell Haz to start talking to them. Altern
 -Credits-  
 Programming: Zachary Kidd-Smith (FlyingLobster: https://github.com/FlyingFLobster), niceholgate (https://github.com/niceholgate)  
 Game Design, writing: Jake Bamford (Dapper Cranium: https://dappercranium.wordpress.com/)  
-Character Design, 2D Assets: Wayne Eades (https://twitter.com/SSSep12k), Tri Phan (Deku-Tri: https://twitter.com/greatdekutri)  
+Character Design, 2D Assets: Wayne Eades (https://twitter.com/SSSep12k), Tri Phan (Deku-Tri: https://twitter.com/greatdekutri), Genevieve Chapman
 3D Assets: Wayne Eades (https://twitter.com/SSSep12k)  
 Music: Justin Chong (https://soundcloud.com/primitive-troll)  
 Level Design: Zachary Kidd-Smith (FlyingLobster: https://github.com/FlyingFLobster)  
